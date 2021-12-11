@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LocationTypeahead from './location-typeahead';
 // import TrackedCities from './tracked-cities'
 import {
   waitForIt,
   toLowerCase,
-} from './utils';
+  storageFactory,
+} from '../utils';
 import locationApi from '../api';
 
 import './style/landing.css';
+
+const WEATHER_STORAGE_KEY = 'cities';
+const storage = storageFactory({
+  name: 'weatha-selekta',
+  driver: 'localStorage',
+});
 
 const Landing = () => {
   const [isLoading, setLoading] = useState(false);
@@ -15,6 +22,13 @@ const Landing = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [selectedCities, addCity] = useState([]);
   const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    if (storage.has(WEATHER_STORAGE_KEY)) {
+      addCity(storage.get(WEATHER_STORAGE_KEY));
+    }
+  // only run prefill on first render
+  }, []);
 
   const handleChange = e => {
     const { value } = e.target;
@@ -38,6 +52,7 @@ const Landing = () => {
   const onSubmit = selection => {
     setQuery(selection);
     if (!selectedCities.map(toLowerCase).includes(toLowerCase(selection))) {
+      storage.set(WEATHER_STORAGE_KEY, selectedCities.concat([selection]));
       addCity(prev => [...prev, selection]);
     }
 
@@ -49,10 +64,13 @@ const Landing = () => {
   return (
     <div className="weatha-selekta____landing">
       <h1>Add cities to track weather</h1>
-      {/* I went with this quick help text instead of forcing user to select from the dropdown
-        * probably more of a "product" decision anyway
-        */}
-      {showHelp && <small>press enter if the first match is right or use the drop down for more matches</small>}
+      {showHelp && (
+        <small>
+          {typeof suggestions === 'undefined'
+            ? 'Hmm, no results, are you sure you spelt that correctly'
+            : 'press enter if the first match is right or use the drop down for more matches'}
+        </small>
+      )}
       <LocationTypeahead
         suggestions={suggestions}
         query={query}
