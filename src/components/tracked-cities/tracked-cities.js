@@ -7,13 +7,13 @@ import '../style/tracked-cities.css';
 const TrackedCities = ({ cities, onRemove }) => (
   <section className="weatha-selekta__tracked-cities-wrapper">
     {cities.map((city, idx) => (
-      <div className="weatha-selekta__tracked-city-card">
-        {/* eslint-disable-next-line react/no-array-index-key */}
-        <div key={`${idx}-${city.location}`}>{city.location}</div>
+      // eslint-disable-next-line react/no-array-index-key
+      <div className="weatha-selekta__tracked-city-card" key={`${idx}-${city.location}`}>
+        <h2 className="weatha-selekta__tracked-city-title">{city.location}</h2>
         <CurrentWeather weather={city.weather} />
         <button
           className="weatha-selekta__remove-tracked-city-button"
-          onClick={() => onRemove(city)}
+          onClick={() => onRemove(city.location)}
         >
           remove city
         </button>
@@ -23,12 +23,11 @@ const TrackedCities = ({ cities, onRemove }) => (
 );
 
 TrackedCities.propTypes = {
-  cities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  cities: PropTypes.arrayOf(PropTypes.shape({
+    location: PropTypes.string,
+    weather: PropTypes.shape({}),
+  })).isRequired,
   onRemove: PropTypes.func,
-  currentConditions: PropTypes.shape({
-    text: PropTypes.string,
-    icon: PropTypes.string,
-  }).isRequired,
 };
 
 TrackedCities.defaultProps = {

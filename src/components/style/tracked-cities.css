@@ -15,3 +15,8 @@
 .weatha-selekta__remove-tracked-city-button {
   height: fit-content;
 }
+
+.weatha-selekta__tracked-city-title {
+  font-size: 18px;
+  font-weight: 500;
+}

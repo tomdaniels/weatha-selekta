@@ -76,7 +76,7 @@ const Landing = () => {
   };
 
   const handleRemove = city => {
-    const filtered = trackedCities.filter(negate(findMatch(city.location)));
+    const filtered = trackedCities.filter(negate(findMatch(city)));
     storage.set(TRACKED_CITIES_STORAGE_KEY, filtered);
     setTrackedCities(filtered);
   };
