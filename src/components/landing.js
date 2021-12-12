@@ -20,6 +20,8 @@ const TRACKED_CITIES_STORAGE_KEY = 'cities';
 const Landing = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
   const [suggestions, setSuggestions] = useState([]);
   const [trackedCities, setTrackedCities] = useState([]);
   const [query, setQuery] = useState('');
@@ -60,6 +62,11 @@ const Landing = () => {
     if (!alreadyTracked) {
       debounce(() => {
         locationApi.getForecast(selection).then(data => {
+          if (typeof data === 'undefined') {
+            setHasError(true);
+            return;
+          }
+
           const weatherSet = { location: selection, weather: { ...data } };
           storage.set(TRACKED_CITIES_STORAGE_KEY, trackedCities.concat(weatherSet));
           setTrackedCities(prev => [...prev, weatherSet]);
@@ -91,6 +98,7 @@ const Landing = () => {
         handleChange={handleChange}
       />
       {isLoading && <div>searching for location matches</div>}
+      {hasError && <pre>Hmm, something went wrong, please try that one again..</pre>}
       {trackedCities.length > 0 && (
         <TrackedCities
           cities={trackedCities}
