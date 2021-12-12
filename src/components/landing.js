@@ -33,11 +33,16 @@ const Landing = () => {
   // only run prefill on first render
   }, []);
 
+  const resetFormState = () => {
+    setHasError(false);
+    setShowHelp(false);
+    setSuggestions([]);
+  };
+
   const handleChange = e => {
     const { value } = e.target;
     setQuery(value);
-    setShowHelp(false);
-    setSuggestions([]);
+    resetFormState();
     if (value === '') {
       return;
     }
@@ -53,9 +58,7 @@ const Landing = () => {
   };
 
   const onSubmit = selection => {
-    setSuggestions([]);
-    setShowHelp(false);
-    setLoading(false);
+    resetFormState();
     setQuery(selection);
 
     const alreadyTracked = trackedCities.map(v => toLowerCase(v.location)).includes(toLowerCase(selection));
