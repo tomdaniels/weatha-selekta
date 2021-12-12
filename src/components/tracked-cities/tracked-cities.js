@@ -11,7 +11,12 @@ const TrackedCities = ({ cities, removeCity }) => (
         {/* eslint-disable-next-line react/no-array-index-key */}
         <div key={`${idx}-${city.location}`}>{city.location}</div>
         <CurrentWeather weather={city.weather} />
-        <button onClick={() => removeCity(city)}>remove city</button>
+        <button
+          className="weatha-selekta__remove-tracked-city-button"
+          onClick={() => removeCity(city)}
+        >
+          remove city
+        </button>
       </div>
     ))}
   </section>
