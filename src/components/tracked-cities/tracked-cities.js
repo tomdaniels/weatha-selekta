@@ -4,7 +4,7 @@ import CurrentWeather from './current-weather';
 
 import '../style/tracked-cities.css';
 
-const TrackedCities = ({ cities, removeCity }) => (
+const TrackedCities = ({ cities, onRemove }) => (
   <section className="weatha-selekta__tracked-cities-wrapper">
     {cities.map((city, idx) => (
       <div className="weatha-selekta__tracked-city-card">
@@ -13,7 +13,7 @@ const TrackedCities = ({ cities, removeCity }) => (
         <CurrentWeather weather={city.weather} />
         <button
           className="weatha-selekta__remove-tracked-city-button"
-          onClick={() => removeCity(city)}
+          onClick={() => onRemove(city)}
         >
           remove city
         </button>
@@ -24,7 +24,7 @@ const TrackedCities = ({ cities, removeCity }) => (
 
 TrackedCities.propTypes = {
   cities: PropTypes.arrayOf(PropTypes.string).isRequired,
-  removeCity: PropTypes.func,
+  onRemove: PropTypes.func,
   currentConditions: PropTypes.shape({
     text: PropTypes.string,
     icon: PropTypes.string,
@@ -32,7 +32,7 @@ TrackedCities.propTypes = {
 };
 
 TrackedCities.defaultProps = {
-  removeCity: () => {},
+  onRemove: () => {},
 };
 
 export default TrackedCities;
