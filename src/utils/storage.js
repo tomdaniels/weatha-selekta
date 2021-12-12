@@ -65,6 +65,14 @@ function createInstance({ driver, name }) {
         console.error(config.driver, err);
       }
     },
+
+    remove(key) {
+      try {
+        storage.removeItem(`${config.prefix}${key}`);
+      } catch (err) {
+        console.error(config.driver, err);
+      }
+    },
   };
 }
 

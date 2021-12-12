@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
 import fetch from './fetch';
 
 const signed = (url, key) => `${url}?key=${key}`;
@@ -7,7 +8,7 @@ const signed = (url, key) => `${url}?key=${key}`;
 const API_KEY = '89ef7791ec1448f9a4a53300210612';
 const WEATHER_API_BASE_URL = 'https://api.weatherapi.com/v1';
 const WEATHER_AUTOCOMPLETE_ENDPOINT = signed(`${WEATHER_API_BASE_URL}/search.json`, API_KEY);
-const WEATHER_FORECAST_ENDPOINT = signed(`${WEATHER_API_BASE_URL}/forecast.json`, API_KEY);
+const WEATHER_CONDITIONS_ENDPOINT = signed(`${WEATHER_API_BASE_URL}/current.json`, API_KEY);
 
 const nameOnly = collec => collec.name;
 
@@ -21,12 +22,18 @@ export default {
       : response?.map(nameOnly);
   },
 
-  async getForecast(location) {
-    const apiUrl = `${WEATHER_FORECAST_ENDPOINT}&q=${encodeURIComponent(location)}`;
+  async getForecast(query) {
+    const apiUrl = `${WEATHER_CONDITIONS_ENDPOINT}&q=${encodeURIComponent(query)}`;
     const response = await fetch(apiUrl);
+
+    const temp = get(response, 'current.temp_c', '');
+    const currentConditions = get(response, 'current.condition', '');
 
     return isEmpty(response)
       ? undefined
-      : response;
+      : {
+        temp,
+        currentConditions,
+      };
   },
 };

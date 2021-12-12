@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LocationTypeahead from './location-typeahead';
-// import TrackedCities from './tracked-cities'
+import TrackedCities from './tracked-cities';
 import {
   waitForIt,
   toLowerCase,
@@ -10,22 +10,23 @@ import locationApi from '../api';
 
 import './style/landing.css';
 
-const WEATHER_STORAGE_KEY = 'cities';
 const storage = storageFactory({
   name: 'weatha-selekta',
   driver: 'localStorage',
 });
 
+const TRACKED_CITIES_STORAGE_KEY = 'cities';
+
 const Landing = () => {
+  const [showHelp, setShowHelp] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const [showHelp, setShowHelp] = useState(false);
-  const [selectedCities, addCity] = useState([]);
+  const [trackedCities, setTrackedCities] = useState([]);
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    if (storage.has(WEATHER_STORAGE_KEY)) {
-      addCity(storage.get(WEATHER_STORAGE_KEY));
+    if (storage.has(TRACKED_CITIES_STORAGE_KEY)) {
+      setTrackedCities(storage.get(TRACKED_CITIES_STORAGE_KEY));
     }
   // only run prefill on first render
   }, []);
@@ -50,15 +51,27 @@ const Landing = () => {
   };
 
   const onSubmit = selection => {
-    setQuery(selection);
-    if (!selectedCities.map(toLowerCase).includes(toLowerCase(selection))) {
-      storage.set(WEATHER_STORAGE_KEY, selectedCities.concat([selection]));
-      addCity(prev => [...prev, selection]);
-    }
-
     setSuggestions([]);
     setShowHelp(false);
     setLoading(false);
+    setQuery(selection);
+
+    const alreadyTracked = trackedCities.map(v => toLowerCase(v.location)).includes(toLowerCase(selection));
+    if (!alreadyTracked) {
+      waitForIt(() => {
+        locationApi.getForecast(selection).then(data => {
+          const weatherSet = { location: selection, weather: { ...data } };
+          storage.set(TRACKED_CITIES_STORAGE_KEY, trackedCities.concat(weatherSet));
+          setTrackedCities(prev => [...prev, weatherSet]);
+        });
+      });
+    }
+  };
+
+  const handleRemove = city => {
+    const filtered = trackedCities.filter(v => toLowerCase(v.location) !== toLowerCase(city.location));
+    storage.set(TRACKED_CITIES_STORAGE_KEY, filtered);
+    setTrackedCities(filtered);
   };
 
   return (
@@ -78,7 +91,12 @@ const Landing = () => {
         handleChange={handleChange}
       />
       {isLoading && <div>searching for location matches</div>}
-      {/* {selectedCities.length > 0 && <TrackedCities cities={selectedCities} />} */}
+      {trackedCities.length > 0 && (
+        <TrackedCities
+          cities={trackedCities}
+          removeCity={handleRemove}
+        />
+      )}
     </div>
   );
 };
