@@ -7,7 +7,7 @@ const locationTypeahead = ({
 }) => {
   const selectRef = useRef(null);
   const handleKeyDown = event => {
-    if (event.key === 'ArrowDown' && selectRef.current) {
+    if (selectRef.current && event.key === 'ArrowDown') {
       selectRef.current.focus();
     }
   };
@@ -29,6 +29,7 @@ const locationTypeahead = ({
       />
       {suggestions?.length > 0 && (
       <select ref={selectRef} id="typeahead" onChange={event => onSubmit(event.target.value)}>
+        <option>Please select your location from below:</option>
         {suggestions.map((city, idx) => (
           // eslint-disable-next-line react/no-array-index-key
           <option key={`${city}-${idx}`}>{city}</option>))}
