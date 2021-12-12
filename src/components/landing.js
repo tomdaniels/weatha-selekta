@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import LocationTypeahead from './location-typeahead';
 import TrackedCities from './tracked-cities';
 import {
-  waitForIt,
+  debounce,
   toLowerCase,
   storageFactory,
 } from '../utils';
@@ -41,7 +41,7 @@ const Landing = () => {
     }
 
     setLoading(true);
-    waitForIt(() => {
+    debounce(() => {
       locationApi.locations(query).then(data => {
         setSuggestions(data);
         setLoading(false);
@@ -58,7 +58,7 @@ const Landing = () => {
 
     const alreadyTracked = trackedCities.map(v => toLowerCase(v.location)).includes(toLowerCase(selection));
     if (!alreadyTracked) {
-      waitForIt(() => {
+      debounce(() => {
         locationApi.getForecast(selection).then(data => {
           const weatherSet = { location: selection, weather: { ...data } };
           storage.set(TRACKED_CITIES_STORAGE_KEY, trackedCities.concat(weatherSet));
