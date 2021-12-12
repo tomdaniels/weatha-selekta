@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 
 import '../style/location-typeahead.css';
 
-const locationTypeahead = ({
-  query, handleChange, suggestions, onSubmit,
+const LocationTypeahead = ({
+  query, suggestions, handleChange, onSubmit,
 }) => {
   const selectRef = useRef(null);
   const handleKeyDown = event => {
@@ -39,4 +40,18 @@ const locationTypeahead = ({
   );
 };
 
-export default locationTypeahead;
+LocationTypeahead.propTypes = {
+  query: PropTypes.string,
+  suggestions: PropTypes.arrayOf(PropTypes.string),
+  handleChange: PropTypes.func,
+  onSubmit: PropTypes.func,
+};
+
+LocationTypeahead.defaultProps = {
+  query: '',
+  suggestions: [],
+  handleChange: () => {},
+  onSubmit: () => {},
+};
+
+export default LocationTypeahead;
