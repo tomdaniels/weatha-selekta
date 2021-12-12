@@ -7,7 +7,7 @@ const locationTypeahead = ({
 }) => {
   const selectRef = useRef(null);
   const handleKeyDown = event => {
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown' && selectRef.current) {
       selectRef.current.focus();
     }
   };
