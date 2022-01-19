@@ -1,11 +1,10 @@
 {
-  "env": {
-    "jest": true
-  },
-  "globals": {
-    "enzyme": "readonly",
-    
-    "React": "readonly"
-  }
+  "extends": ["td-eslint-config/test"]
+  // "env": {
+  //   "jest": true
+  // },
+  // "globals": {
+  //   "enzyme": "readonly",
+  //   "React": "readonly"
+  // }
 }
- 
