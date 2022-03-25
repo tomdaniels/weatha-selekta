@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import storageFactory from 'td-storage';
 import negate from 'lodash/negate';
+
 import LocationTypeahead from './location-typeahead';
 import TrackedCities from './tracked-cities';
 import locationApi from '../api';
 import {
   debounce,
   findMatch,
-  storageFactory,
 } from '../utils';
 
 import './style/landing.css';

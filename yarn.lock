@@ -10812,6 +10812,11 @@ tar@^6.0.2:
     mkdirp "^1.0.3"
     yallist "^4.0.0"
 
+td-storage@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/td-storage/-/td-storage-1.1.0.tgz#6632799a3c6dd451429673b36d07071cd7e06316"
+  integrity sha512-Jj3D7B6MudSXhtpBZ9IRYQvK862SFgp3y8ad37fYTxQnvUJEcBVmVUGU/4qcqpYbfQo2annTiGlwTaspXjbWgA==
+
 temp-dir@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-1.0.0.tgz#0a7c0ea26d3a39afa7e0ebea9c1fc0bc4daa011d"
