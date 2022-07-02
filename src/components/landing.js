@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import storageFactory from 'td-storage';
 import negate from 'lodash/negate';
 
@@ -23,15 +23,14 @@ const Landing = () => {
   const [isLoading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const [trackedCities, setTrackedCities] = useState([]);
   const [query, setQuery] = useState('');
-
-  useEffect(() => {
+  const [trackedCities, setTrackedCities] = useState(() => {
     if (storage.has(TRACKED_CITIES_STORAGE_KEY)) {
-      setTrackedCities(storage.get(TRACKED_CITIES_STORAGE_KEY));
+      return storage.get(TRACKED_CITIES_STORAGE_KEY);
     }
-  // only run prefill on first render
-  }, []);
+
+    return [];
+  });
 
   const resetFormState = () => {
     setHasError(false);
